@@ -7,5 +7,3 @@ hide_description: true
 slug: pick
 sitemap: false
 ---
-
-Amplify 이용
