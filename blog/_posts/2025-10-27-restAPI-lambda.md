@@ -145,5 +145,7 @@ Flutter → API Gateway → Lambda(handler.ts) → JSON Response
 **참고 자료**
 
 [AWS Amplify Documentation][AWS Amplify Documentation]: https://docs.amplify.aws/gen2/
+
 [AWS CDK v2 API Reference][AWS CDK v2 API Reference]: https://docs.aws.amazon.com/cdk/api/v2/docs/aws-construct-library.html
+
 [AWS Amplify Flutter Developer Guide][AWS Amplify Flutter Developer Guide]: https://docs.amplify.aws/flutter/
