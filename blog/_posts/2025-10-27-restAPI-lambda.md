@@ -11,6 +11,7 @@ tags: [amplify]
 # REST API 설계 및 Lambda 핸들러 연결
 
 ## 함수 정의
+
 ```ts
 // amplify/functions/api-function/resource.ts
 import { defineFunction } from "@aws-amplify/backend";
@@ -21,6 +22,7 @@ export const myApiFunction = defineFunction({
 ```
 
 ## 핸들러 코드
+
 ```ts
 // amplify/functions/api-function/handler.ts
 export const handler = async (event) => {
@@ -33,6 +35,7 @@ export const handler = async (event) => {
 ```
 
 ## API Gateway 연결
+
 ```ts
 // amplify/backend.ts
 import { defineBackend } from "@aws-amplify/backend";
@@ -68,6 +71,7 @@ backend.addOutput({
 # Flutter와 Amplify 연동
 
 ## Amplify 초기화
+
 ```dart
 import 'package:amplify_flutter/amplify_flutter.dart';
 import 'amplify_outputs.dart';
@@ -78,6 +82,7 @@ Future<void> configureAmplify() async {
 ```
 
 ## API 호출 예시
+
 ```dart
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -112,6 +117,7 @@ final response = await http.get(
 # 전체 동작 흐름 요약
 
 ## 요청 → 응답 흐름
+
 ```scss
 [Flutter App]
      │ (GET /hello)
@@ -129,6 +135,7 @@ final response = await http.get(
 ```
 
 간단한 호출 구조
+
 ```text
 Flutter → API Gateway → Lambda(handler.ts) → JSON Response
 ```
@@ -137,8 +144,6 @@ Flutter → API Gateway → Lambda(handler.ts) → JSON Response
 
 **참고 자료**
 
-[AWS Amplify Documentation]: https://docs.amplify.aws/gen2/
-
-[AWS CDK v2 API Reference]: https://docs.aws.amazon.com/cdk/api/v2/docs/aws-construct-library.html
-
-[AWS Amplify Flutter Developer Guide]: https://docs.amplify.aws/flutter/
+[AWS Amplify Documentation][AWS Amplify Documentation]: https://docs.amplify.aws/gen2/
+[AWS CDK v2 API Reference][AWS CDK v2 API Reference]: https://docs.aws.amazon.com/cdk/api/v2/docs/aws-construct-library.html
+[AWS Amplify Flutter Developer Guide][AWS Amplify Flutter Developer Guide]: https://docs.amplify.aws/flutter/
