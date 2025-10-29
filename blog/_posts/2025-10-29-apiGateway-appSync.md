@@ -398,12 +398,12 @@ Stage 배포 시마다 URL을 수동으로 등록해야 하고,
 
 ### 참고자료
 
-[https://www.reddit.com/r/aws/comments/14cfji8/aws_appsync_vs_api_gateway_a_comprehensive_guide/]: https://www.reddit.com/r/aws/comments/14cfji8/aws_appsync_vs_api_gateway_a_comprehensive_guide/
-[https://learnaws.io/blog/appsync-vs-api-gateway/#web-socket-apis--the-cool-sibling]: https://learnaws.io/blog/appsync-vs-api-gateway/#web-socket-apis--the-cool-sibling
-[https://blog.toktokhan.dev/rest-api-vs-graphql-7348f54a220b]: https://blog.toktokhan.dev/rest-api-vs-graphql-7348f54a220b
-[https://docs.aws.amazon.com/ko_kr/apigateway/latest/developerguide/apigateway-websocket-api-route-keys-connect-disconnect.html#apigateway-websocket-api-routes-about-connect]: https://docs.aws.amazon.com/ko_kr/apigateway/latest/developerguide/apigateway-websocket-api-route-keys-connect-disconnect.html#apigateway-websocket-api-routes-about-connect
-[https://docs.aws.amazon.com/ko_kr/appsync/latest/eventapi/publish-websocket.html]: https://docs.aws.amazon.com/ko_kr/appsync/latest/eventapi/publish-websocket.html
-[https://docs.aws.amazon.com/ko_kr/appsync/latest/devguide/what-is-appsync.html]: https://docs.aws.amazon.com/ko_kr/appsync/latest/devguide/what-is-appsync.html
+[Reddit: AWS AppSync vs API Gateway - A Comprehensive Guide]: https://www.reddit.com/r/aws/comments/14cfji8/aws_appsync_vs_api_gateway_a_comprehensive_guide/
+[LearnAWS: AppSync vs API Gateway (WebSocket APIs Section)]: https://learnaws.io/blog/appsync-vs-api-gateway/#web-socket-apis--the-cool-sibling
+[Toktokhan Blog: REST API vs GraphQL 비교]: https://blog.toktokhan.dev/rest-api-vs-graphql-7348f54a220b
+[AWS Docs: API Gateway WebSocket API Route Keys (CONNECT/DISCONNECT)]: https://docs.aws.amazon.com/ko_kr/apigateway/latest/developerguide/apigateway-websocket-api-route-keys-connect-disconnect.html#apigateway-websocket-api-routes-about-connect
+[AWS Docs: AppSync WebSocket Event API - Publish Messages]: https://docs.aws.amazon.com/ko_kr/appsync/latest/eventapi/publish-websocket.html
+[AWS Docs: What is AWS AppSync?]: https://docs.aws.amazon.com/ko_kr/appsync/latest/devguide/what-is-appsync.html
 
 [app-sync]:
 [api-gateway]:
