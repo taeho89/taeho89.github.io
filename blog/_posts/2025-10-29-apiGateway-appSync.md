@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "API Gateway WebSocket API, AppSync Realtime Endpoint 기능 차이"
-date: 2025-10-28 01:06:00 +0900
+date: 2025-10-29 04:06:00 +0900
 description: >
   웹 소켓을 이용한 채팅 기능 구현을 위한 두 가지 AWS 기능과 차이, 선택 이유에 대해서 정리합니다.
 categories: [pick]
@@ -396,13 +396,14 @@ Stage 배포 시마다 URL을 수동으로 등록해야 하고,
 
 ---
 
-**참고자료**
-https://www.reddit.com/r/aws/comments/14cfji8/aws_appsync_vs_api_gateway_a_comprehensive_guide/
-https://learnaws.io/blog/appsync-vs-api-gateway/#web-socket-apis--the-cool-sibling
-https://blog.toktokhan.dev/rest-api-vs-graphql-7348f54a220b
-https://docs.aws.amazon.com/ko_kr/apigateway/latest/developerguide/apigateway-websocket-api-route-keys-connect-disconnect.html#apigateway-websocket-api-routes-about-connect
-https://docs.aws.amazon.com/ko_kr/appsync/latest/eventapi/publish-websocket.html
-https://docs.aws.amazon.com/ko_kr/appsync/latest/devguide/what-is-appsync.html
+### 참고자료
+
+[[text](https://www.reddit.com/r/aws/comments/14cfji8/aws_appsync_vs_api_gateway_a_comprehensive_guide/)]: https://www.reddit.com/r/aws/comments/14cfji8/aws_appsync_vs_api_gateway_a_comprehensive_guide/
+[[text](https://learnaws.io/blog/appsync-vs-api-gateway/#web-socket-apis--the-cool-sibling)]: https://learnaws.io/blog/appsync-vs-api-gateway/#web-socket-apis--the-cool-sibling
+[[text](https://blog.toktokhan.dev/rest-api-vs-graphql-7348f54a220b)]: https://blog.toktokhan.dev/rest-api-vs-graphql-7348f54a220b
+[[text](https://docs.aws.amazon.com/ko_kr/apigateway/latest/developerguide/apigateway-websocket-api-route-keys-connect-disconnect.html#apigateway-websocket-api-routes-about-connect)]: https://docs.aws.amazon.com/ko_kr/apigateway/latest/developerguide/apigateway-websocket-api-route-keys-connect-disconnect.html#apigateway-websocket-api-routes-about-connect
+[[text](https://docs.aws.amazon.com/ko_kr/appsync/latest/eventapi/publish-websocket.html)]: https://docs.aws.amazon.com/ko_kr/appsync/latest/eventapi/publish-websocket.html
+[[text](https://docs.aws.amazon.com/ko_kr/appsync/latest/devguide/what-is-appsync.html)]: https://docs.aws.amazon.com/ko_kr/appsync/latest/devguide/what-is-appsync.html
 
 [app-sync]:
 [api-gateway]:
