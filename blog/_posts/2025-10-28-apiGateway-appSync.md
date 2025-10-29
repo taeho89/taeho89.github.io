@@ -394,5 +394,15 @@ Stage 배포 시마다 URL을 수동으로 등록해야 하고,
 다만, 팀 내에서 GraphQL 경험이 많지 않기 때문에 앞으로 스키마 설계, Subscription 필터링, Resolver 파이프라인 같은 부분을
 체계적으로 학습해 나가면서 AppSync의 장점을 최대한 활용할 계획이다.
 
+---
+
+**참고자료**
+https://www.reddit.com/r/aws/comments/14cfji8/aws_appsync_vs_api_gateway_a_comprehensive_guide/
+https://learnaws.io/blog/appsync-vs-api-gateway/#web-socket-apis--the-cool-sibling
+https://blog.toktokhan.dev/rest-api-vs-graphql-7348f54a220b
+https://docs.aws.amazon.com/ko_kr/apigateway/latest/developerguide/apigateway-websocket-api-route-keys-connect-disconnect.html#apigateway-websocket-api-routes-about-connect
+https://docs.aws.amazon.com/ko_kr/appsync/latest/eventapi/publish-websocket.html
+https://docs.aws.amazon.com/ko_kr/appsync/latest/devguide/what-is-appsync.html
+
 [app-sync]:
 [api-gateway]:
