@@ -159,7 +159,7 @@ export function response(ctx) {
 **참고 문서**:
 
 - [AppSync JS Resolver Reference](https://docs.aws.amazon.com/appsync/latest/devguide/resolver-reference-overview-js.html)
-- [DynamoDB Operations Reference](https://docs.aws.amazon.com/appsync/latest/devguide/resolver-reference-dynamodb-js.html)
+- [DynamoDB Operations Reference](https://docs.aws.amazon.com/ko_kr/appsync/latest/devguide/resolver-mapping-template-reference-dynamodb.html)
 
 ---
 
@@ -387,13 +387,13 @@ createPost: a.mutation().returns(a.ref("Post")).handler(a.handler.function(creat
 
 ### 공식 문서
 
-| 항목                         | 링크                                                                                                 | 설명                     |
-| ---------------------------- | ---------------------------------------------------------------------------------------------------- | ------------------------ |
-| AppSync JS Resolver Overview | [공식 문서](https://docs.aws.amazon.com/appsync/latest/devguide/resolver-reference-overview-js.html) | 리졸버 개요 및 기본 개념 |
-| DynamoDB Resolver Reference  | [공식 문서](https://docs.aws.amazon.com/appsync/latest/devguide/resolver-reference-dynamodb-js.html) | DynamoDB 작업 전체 목록  |
-| Context Reference            | [공식 문서](https://docs.aws.amazon.com/appsync/latest/devguide/resolver-context-reference-js.html)  | ctx 객체 상세 명세       |
-| Utility Reference (`util.*`) | [공식 문서](https://docs.aws.amazon.com/appsync/latest/devguide/resolver-util-reference.html)        | 유틸리티 함수 전체 목록  |
-| Pipeline Resolvers           | [공식 문서](https://docs.aws.amazon.com/appsync/latest/devguide/pipeline-resolvers-js.html)          | 다단계 리졸버 구성 방법  |
+| 항목                         | 링크                                                                                                                     | 설명                     |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
+| AppSync JS Resolver Overview | [공식 문서](https://docs.aws.amazon.com/appsync/latest/devguide/resolver-reference-overview-js.html)                     | 리졸버 개요 및 기본 개념 |
+| DynamoDB Resolver Reference  | [공식 문서](https://docs.aws.amazon.com/ko_kr/appsync/latest/devguide/resolver-mapping-template-reference-dynamodb.html) | DynamoDB 작업 전체 목록  |
+| Context Reference            | [공식 문서](https://docs.aws.amazon.com/appsync/latest/devguide/resolver-context-reference-js.html)                      | ctx 객체 상세 명세       |
+| Utility Reference (`util.*`) | [공식 문서](https://docs.aws.amazon.com/appsync/latest/devguide/resolver-util-reference.html)                            | 유틸리티 함수 전체 목록  |
+| Pipeline Resolvers           | [공식 문서](https://docs.aws.amazon.com/appsync/latest/devguide/pipeline-resolvers-js.html)                              | 다단계 리졸버 구성 방법  |
 
 ### 추가 학습 리소스
 
