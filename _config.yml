@@ -27,7 +27,9 @@ description: >
   풀스택 개발자 희망
 
 # A shorter description for the sidebar.
-tagline: 경기대학교 컴퓨터 공학과, `42경산 공통과정 수료`
+tagline: >
+  경기대학교 컴퓨터 공학과
+  `42경산 공통과정 수료`
 
 # A list of keywords for your blog
 keywords: ["C", "C++", "Flutter"]

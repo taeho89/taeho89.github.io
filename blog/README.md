@@ -8,6 +8,8 @@ sitemap: false
 permalink: /blog/
 ---
 
-* [Pick]{:.heading.flip-title} --- pick 데이팅 어플 개발 블로그
+- [Pick]{:.heading.flip-title} --- pick 데이팅 어플 개발
+- [42Cursus]{:.heading.flip-title} --- 42경산 교육과정
 
 [Pick]: pick.md
+[42Cursus]: 42Cursus.md
