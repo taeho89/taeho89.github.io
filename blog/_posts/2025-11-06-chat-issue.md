@@ -244,3 +244,113 @@ export function response(ctx) {
 ---
 
 이 과정을 통해 “안 읽은 메시지 읽음 처리”를 성능/정합성/유지보수성 모두 만족하는 구조로 안정화했습니다.
+
+---
+
+## 정량화(측정 가이드)
+
+### 핵심 KPI
+
+- 서버 쓰기량
+  - DynamoDB WRU(ConsumedWriteCapacityUnits) 총합/세션/일
+  - 쓰기 요청 수(WriteRequestCount) 또는 UpdateItem/PutItem 호출 수
+  - 조건부 갱신 실패율(ConditionalCheckFailedRequests; 멱등·경쟁조건 지표)
+- 지연 시간
+  - AppSync markReadUpTo p50/p95 GraphQLLatency
+  - 클라이언트에서 “입장 → 읽음 확정” 왕복시간 p50/p95
+- 비용/네트워크
+  - WRU 기준 예상 비용(온디맨드: 1 WRU ≈ 1KB 쓰기 1회)
+  - 읽음 처리 관련 업/다운로드 바이트/세션
+- 품질/정합성
+  - 중복 방지율(조건부 갱신으로 스킵된 비율)
+  - 읽음 불일치 인시던트 건수(버그 리포트/로그 카운트)
+
+### 비교 방법(전/후 또는 A/B)
+
+- 전/후 비교: 배포 타임라인을 기준으로 같은 기간(예: 7일) 전/후 지표 비교
+- A/B: 일부 사용자/룸에 기존 방식 vs 커서 방식 동시 운영(헤더 플래그, 별도 스테이지) 후 지표 비교
+
+### 계산식(템플릿)
+
+기호:
+
+- U = 입장 시 평균 미읽음 메시지 수
+- P = 페이지 크기(예: 50)
+- K = 세션당 커서 업데이트 호출 수(보통 1~3, 디바운스 포함)
+- S_readby = 메시지별 ReadBy 아이템 평균 크기(KB)
+- S_cursor = ReadCursor 아이템 평균 크기(KB, 보통 < 1KB)
+- Price_WRU = WRU 단가(온디맨드 기준 1백만 WRU당 약 $1.25; 지역/요금제에 따라 상이)
+
+쓰기 건수(세션 기준):
+
+- 기존: Writes_before ≈ min(U, 실제로 생성한 ReadBy 개수) // 예: 첫 페이지만이면 ≈ P, 전체 미읽음이면 ≈ U
+- 변경: Writes_after ≈ K // 커서 1~3회
+
+WRU(세션 기준):
+
+- WRU_before ≈ Writes_before × ceil(S_readby / 1KB)
+- WRU_after ≈ K × ceil(S_cursor / 1KB)
+
+절감률:
+
+- WRU_Savings(%) = 1 − (WRU_after / WRU_before)
+- 비용 절감액(일) ≈ (WRU_before_day − WRU_after_day) × Price_WRU
+
+예시(치환):
+
+- U=120, P=50, K=2, S_readby=0.4KB, S_cursor=0.2KB →
+  - Writes_before(전체 미읽음) ≈ 120, Writes_after ≈ 2
+  - WRU_before ≈ 120 × 1 = 120 WRU, WRU_after ≈ 2 × 1 = 2 WRU
+  - 절감률 ≈ 98.3%
+
+### 수집 방법
+
+서버(DynamoDB)
+
+- CloudWatch 메트릭
+  - AWS/DynamoDB: ConsumedWriteCapacityUnits(Sum), ConditionalCheckFailedRequests(Sum), SuccessfulRequestLatency(p50/p95)
+- 샘플 CLI
+  - WRU 합계:
+    aws cloudwatch get-metric-statistics \
+     --namespace AWS/DynamoDB --metric-name ConsumedWriteCapacityUnits \
+     --dimensions Name=TableName,Value=<TableName> \
+     --start-time <ISO8601> --end-time <ISO8601> --period 300 --statistics Sum
+  - 조건부 실패:
+    aws cloudwatch get-metric-statistics \
+     --namespace AWS/DynamoDB --metric-name ConditionalCheckFailedRequests \
+     --dimensions Name=TableName,Value=<TableName> \
+     --start-time <ISO8601> --end-time <ISO8601> --period 300 --statistics Sum
+
+서버(AppSync)
+
+- 그래프QL 레이턴시/요청 수
+  - AWS/AppSync: GraphQLLatency(p50/p95), GraphQLRequestCount(필요 시 Enhanced Metrics로 필드/리졸버 단위 활성화)
+- 샘플 CLI
+  - 지연시간:
+    aws cloudwatch get-metric-statistics \
+     --namespace AWS/AppSync --metric-name GraphQLLatency \
+     --dimensions Name=GraphQLAPIId,Value=<ApiId> Name=Operation,Value=Mutation \
+     --start-time <ISO8601> --end-time <ISO8601> --period 300 --statistics Average,Minimum,Maximum
+
+클라이언트(Flutter)
+
+- 계측 포인트
+  - t0: 룸 입장 요청 직전
+  - t1: 첫 페이지 메시지 수신 완료(최초 렌더)
+  - t2: markReadUpTo 요청 전송
+  - t3: markReadUpTo 응답 수신
+- 기록 지표
+  - API 호출 수(세션), t3−t2(읽음 왕복), t1−t0(최초 렌더), 업/다운로드 바이트(네트워크 인터셉터)
+
+정합성/경쟁 조건
+
+- 조건부 갱신 스킵율 = ConditionalCheckFailedRequests / (ConditionalCheckFailedRequests + 성공 UpdateItem)
+- 목적: 뒤로 되돌아가지 않는지(스킵 발생은 정상)와 과도한 경쟁으로 재시도 폭증이 없는지 확인
+
+### 대시보드 권장 위젯
+
+- DynamoDB ConsumedWriteCapacityUnits(Sum) – 5분 bin, 전/후 비교
+- DynamoDB ConditionalCheckFailedRequests(Sum) – 증가하면 멱등/경쟁 처리 정상 동작 지표
+- AppSync GraphQLLatency p50/p95 – markReadUpTo 중심
+- AppSync 4XX/5XX – 안정성 확인
+- 세션당 API 호출 수/네트워크 바이트(클라이언트 집계치 업로드 시)
