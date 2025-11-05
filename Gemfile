@@ -9,6 +9,11 @@ source "https://rubygems.org"
 # This will help ensure the proper Jekyll version is running.
 # Happy Jekylling!
 gem "jekyll", "~> 4.3"
+
+# JSON 관련 상수 문제 피하기 위한 구버전 SASS 임베디드 사용
+gem "sass-embedded", "1.75.0"
+
+# Jekyll 4.4.x가 json을 쓰기 때문에 명시적으로 최신 json도 같이 명시
 gem "json", "~> 2.10"
 
 gem "jekyll-theme-hydejack", "~> 9.1"
