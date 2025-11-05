@@ -41,6 +41,8 @@ jobs:
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
           cache-version: 0 # Increment this number if you need to re-download cached gems
        # Jekyll (Hydejack 포함) 설치
+      - name: Install build dependencies
+        run: sudo apt-get update && sudo apt-get install -y build-essential ruby-dev
       - name: Install dependencies
         run: |
           bundle install
