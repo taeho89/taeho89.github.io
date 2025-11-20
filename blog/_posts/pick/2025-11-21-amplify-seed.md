@@ -39,7 +39,7 @@ aws iam put-role-policy --role-name <your-role-name> --policy-name <policy-name>
 또는, role을 생성하기 전에 해당 파일의 내용으로 정책을 만들어 IAM 사용자에게 추가해도 되지만, 이는 최소 권한 원칙에 위배될 수 있는 행위임으로 잘 판단하여야 한다.
 
 새로 Role을 생성했다면, 아래의 게시글을 참고하여 role에 대해서 알아보고 오자~
-[Amplify IAM Role][amplify-iam-role]
+[Amplify IAM Role](2025-11-21-amplify-iam-role.md)
 
 ---
 
@@ -140,9 +140,6 @@ try {
 ```
 
 data, storage에 시드를 삽입하는 방법은 다음 게시글에서 다루어보겠다!
-[Data, Storage에 시드 삽입][amplify-seed-data]
+[Data, Storage에 시드 데이터 삽입](2025-11-22-amplify-seed-data.md)
 
 ---
-
-[amplify-iam-role](2025-11-21-amplify-iam-role.md)
-[amplify-seed-data](2025-11-22-amplify-seed-data.md)
