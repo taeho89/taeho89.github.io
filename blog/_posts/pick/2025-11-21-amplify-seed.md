@@ -82,6 +82,8 @@ pnpm ampx sandbox secret set username
 pnpm ampx sandbox secret set password
 ```
 
+## Cognito 유저 생성 및 로그인
+
 seed.ts에 아래 내용을 추가하여 cognito 유저를 생성할 수 있다.
 
 ```ts
@@ -139,7 +141,52 @@ try {
 }
 ```
 
-data, storage에 시드를 삽입하는 방법은 다음 게시글에서 다루어보겠다!
-[Data, Storage에 시드 데이터 삽입](2025-11-22-amplify-seed-data.md)
+## Seed 생성
 
----
+`aws-amplify/cli`를 이용하여 GraphQL문을 이용하여 원하는 데이터를 생성하면 된다.
+
+```ts
+import { generateClient } from "aws-amplify/api";
+
+let dataClient: ReturnType<typeof generateClient<Schema>>; // Client 전역 변수로 등록
+
+async function configureAmplify() {
+  const url = new URL("../../amplify_outputs.json", import.meta.url);
+  const outputs = JSON.parse(await readFile(url, { encoding: "utf8" }));
+  Amplify.configure(outputs);
+  dataClient = generateClient<Schema>(); // 해당 줄 추가 (초기화)
+}
+
+// 채팅방 시드 (ChatRoomWithMembers 생성)
+async function seedChatRoom(ownerUsername: string): Promise<string | null> {
+  try {
+    const response = await dataClient.mutations.createChatRoomWithMembers(
+      {
+        memberIds: [ownerUsername, "user-id-2"],
+      },
+      {
+        authMode: "userPool",
+      }
+    );
+
+    if (response.errors && response.errors.length > 0) {
+      throw response.errors;
+    }
+
+    const roomId = response.data?.id ?? null;
+    if (!roomId) {
+      console.error("Chat room created but no id returned.");
+      return null;
+    }
+
+    console.log("Chat room created:", roomId);
+    return roomId;
+  } catch (err) {
+    console.error("Error creating chat room:", err);
+    return null;
+  }
+}
+```
+
+**참고자료**
+[Sandbox Seed - AWS Amplify Gen 2 Documentation](https://docs.amplify.aws/javascript/deploy-and-host/sandbox-environments/seed/#setting-up-your-seed-script)
