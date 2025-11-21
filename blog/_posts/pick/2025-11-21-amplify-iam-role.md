@@ -8,8 +8,6 @@ categories: [pick]
 tags: [amplify, aws, IAM]
 ---
 
-# AWS IAM Role 완벽 가이드
-
 ## IAM이란?
 
 AWS IAM(Identity and Access Management)은 AWS 클라우드 리소스에 대한 접근을 안전하게 제어하고 관리하는 서비스이다.
