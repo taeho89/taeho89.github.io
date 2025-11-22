@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Amplify 트랜잭션 커스텀 mutate"
-date: 2025-11-21 00:21:00 +0900
+date: 2025-11-22 22:21:00 +0900
 description: >
   Amplify를 통해 트랜잭션을 수행하는 커스텀 Mutation을 작성해봅시다.
 categories: [pick]

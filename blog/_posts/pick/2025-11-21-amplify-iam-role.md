@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Amplify IAM Role"
-date: 2025-11-21 00:21:00 +0900
+date: 2025-11-22 00:21:00 +0900
 description: >
   Amplify IAM Role에 대해서 알아보고 어떻게 사용하는지 배워봅시다.
 categories: [pick]
