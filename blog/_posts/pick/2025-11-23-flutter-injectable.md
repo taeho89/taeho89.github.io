@@ -5,7 +5,7 @@ date: 2025-11-23 01:16:00 +0900
 description: >
   injectable 패키지의 주요 기능을 정리합니다.
 categories: [pick]
-tags: [amplify, data, authorization]
+tags: [flutter, injectable]
 ---
 
 injectable은 get_it 기반의 DI를 자동화해주는 코드 생성 도구이다.
