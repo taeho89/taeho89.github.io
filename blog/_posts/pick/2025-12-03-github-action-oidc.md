@@ -31,7 +31,43 @@ OIDC는 GitHub Actions 워크플로우가 AWS와 같은 클라우드 공급자�
 *   **보안 강화**: GitHub OIDC Provider가 발급한 토큰을 AWS STS(Security Token Service)가 검증하고, 짧은 시간 동안만 유효한 임시 보안 자격 증명을 발급해준다.
 *   **세밀한 제어**: AWS IAM Role의 신뢰 관계(Trust Relationship)를 통해 특정 리포지토리나 브랜치에서만 해당 역할을 수행할 수 있도록 제한할 수 있다.
 
+더 자세한 내용은 GitHub 공식 문서의 [Configuring OpenID Connect in Amazon Web Services](https://docs.github.com/ko/actions/how-tos/secure-your-work/security-harden-deployments/oidc-in-aws)를 참고하면 좋다.
+
 ## 적용 방법
+
+우선 OpenId Conenct ID 제공업체를 추가하여야 한다.
+
+1. AWS IAM 콘솔 -> ID 제공업체 -> 공급자 추가
+
+![alt text](image-12.png)
+
+2. 실제 수행할 작업의 권한을 가진 Role(역할) 생성
+   신뢰 관계에 해당 내용 복사 후 알맞게 수정
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Principal": {
+                "Federated": "arn:aws:iam::<계정 번호>:oidc-provider/token.actions.githubusercontent.com"
+            },
+            "Action": "sts:AssumeRoleWithWebIdentity",
+            "Condition": {
+                "StringEquals": {
+                    "token.actions.githubusercontent.com:aud": "sts.amazonaws.com",
+                    "token.actions.githubusercontent.com:sub": "repo:taeho89(github_id)/<repo_name>:ref:refs/heads/<branch_name>"
+                }
+            }
+        }
+    ]
+}
+```
+
+![alt text](image-13.png)
+
+이후 필요한 권한을 추가하고 github_action_dev와 같이 적절한 이름을 부여한 후 역할을 생성하고, 그 역할의 ARN을 복사해서 GitHub Secrets에 저장한다. (Github -> Repository -> Settings -> Secrets and Variables -> Actions -> New repository secret)
 
 저희 프로젝트에서는 다음과 같이 GitHub Action을 설정하여 빌드 과정에서 `amplify_outputs.dart`와 모델 코드를 생성하고 있다.
 
