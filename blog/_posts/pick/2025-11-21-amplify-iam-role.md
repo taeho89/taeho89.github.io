@@ -77,15 +77,15 @@ Role을 실제로 사용하려면 `sts:AssumeRole` API를 호출하여 임시 �
 **AWS 콘솔에서 생성**
 
 1. IAM 콘솔 → 역할 → 역할 생성
-   ![alt text](image.png)
+   ![alt text](/assets/img/blog/image.png)
 2. 신뢰할 수 있는 엔터티 선택 (AWS 계정, AWS 서비스, 외부 IdP 등)
-   ![alt text](image-1.png)
+   ![alt text](/assets/img/blog/image-1.png)
 3. 권한 정책 추가 (예: AmplifyBackendDeployFullAccess)
-   ![alt text](image-2.png)
+   ![alt text](/assets/img/blog/image-2.png)
 4. Role 이름 지정 후 생성
-   ![alt text](image-3.png)
+   ![alt text](/assets/img/blog/image-3.png)
 5. 생성 후 Role의 ARN 저장
-   ![alt text](image-7.png)
+   ![alt text](/assets/img/blog/image-7.png)
 
 **AWS CLI로 생성**
 
@@ -117,13 +117,13 @@ Role을 만든 후, IAM 사용자에게 해당 Role을 맡을 수 있는 권한�
 이를 위해 sts:AssumeRole을 포함하는 정책을 하나 구성해야한다.
 
 1. IAM 콘솔 → 정책 → 정책 생성
-   ![alt text](image-5.png)
+   ![alt text](/assets/img/blog/image-5.png)
 2. 시각적 편집기 → 서비스 선택(`STS`) → 쓰기(AssumeRole) 추가
-   ![alt text](image-6.png)
+   ![alt text](/assets/img/blog/image-6.png)
 3. ARN 추가 후 위에서 저장했던 Role의 ARN을 추가한다.
-   ![alt text](image-8.png)
+   ![alt text](/assets/img/blog/image-8.png)
 4. 정책 이름 추가 후 정책 생성 및 사용자애게 해당 권한 추가 (직접 정책 연결 -> 고객 관리형 필터링)
-   ![alt text](image-9.png)
+   ![alt text](/assets/img/blog/image-9.png)
 
 ```json
 // 생성된 정책 예시
@@ -144,7 +144,7 @@ Role을 만든 후, IAM 사용자에게 해당 Role을 맡을 수 있는 권한�
 CLI에서 해당 역할로 작업을 수행하기 위해서는 아래의 절차를 따른다.
 
 - 콘솔에서는 상단 위 **역할 전환**을 통해 역할을 전환할 수 있다.
-  ![alt text](image-10.png)
+  ![alt text](/assets/img/blog/image-10.png)
 
 **AWS CLI로 Role 수임**
 

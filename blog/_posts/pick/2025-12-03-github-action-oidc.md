@@ -39,7 +39,7 @@ OIDC는 GitHub Actions 워크플로우가 AWS와 같은 클라우드 공급자�
 
 1. AWS IAM 콘솔 -> ID 제공업체 -> 공급자 추가
 
-![alt text](image-12.png)
+![alt text](/assets/img/blog/image-12.png)
 
 2. 실제 수행할 작업의 권한을 가진 Role(역할) 생성
    신뢰 관계에 해당 내용 복사 후 알맞게 수정
@@ -65,7 +65,7 @@ OIDC는 GitHub Actions 워크플로우가 AWS와 같은 클라우드 공급자�
 }
 ```
 
-![alt text](image-13.png)
+![alt text](/assets/img/blog/image-13.png)
 
 이후 필요한 권한을 추가하고 github_action_dev와 같이 적절한 이름을 부여한 후 역할을 생성하고, 그 역할의 ARN을 복사해서 GitHub Secrets에 저장한다. (Github -> Repository -> Settings -> Secrets and Variables -> Actions -> New repository secret)
 
