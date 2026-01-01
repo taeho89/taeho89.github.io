@@ -2,19 +2,13 @@
 Code for integrating CloudFlare's email protection with Hydejack's single page app loading.
 -->
 <script>
-  document.getElementById('_pushState').addEventListener('hy-push-state-after', function (e) {
-    function e(e){
-      (console.error?console.error:console.log).call(console,e)
-    }
-
-    function t(e){
+  document.getElementById('_pushState')?.addEventListener('hy-push-state-after', function (e) {
+    function logErr(e){ (console.error?console.error:console.log).call(console,e) }
+    function t(e){ 
+      var l=document.createElement("div");
       return l.innerHTML='<a href="'+e.replace(/"/g,"&quot;")+'"></a>',l.childNodes[0].getAttribute("href")
     }
-
-    function r(e,t){
-      var r=e.substr(t,2);return parseInt(r,16)
-    }
-
+    function r(e,t){ var r=e.substr(t,2); return parseInt(r,16) }
     function n(e,n){
       for(var o="",c=r(e,n),a=n+2;a<e.length;a+=2){
         var l=r(e,a)^c;
@@ -22,48 +16,62 @@ Code for integrating CloudFlare's email protection with Hydejack's single page a
       }
       return t(o)
     }
-
-    var o="/cdn-cgi/l/email-protection#",
-        c=".__cf_email__",
-        a="data-cfemail",
-        l=document.createElement("div");
-
+    var o="/cdn-cgi/l/email-protection#", c=".__cf_email__", a="data-cfemail";
     !function(){
       for(var t=document.getElementsByTagName("a"),r=0;r<t.length;r++)
         try{
-          var c=t[r],a=c.href.indexOf(o);
-          a>-1&&(c.href="mailto:"+n(c.href,a+o.length))
-        }catch(t){
-          e(t)
-        }
+          var cur=t[r],idx=cur.href.indexOf(o);
+          idx>-1&&(cur.href="mailto:"+n(cur.href,idx+o.length))
+        }catch(t){ logErr(t) }
     }(),
     function(){
       for(var t=document.querySelectorAll(c),r=0;r<t.length;r++)
         try{
           var o=t[r],l=n(o.getAttribute(a),0),i=document.createTextNode(l);
           o.parentNode.replaceChild(i,o)
-        }catch(t){
-          e(t)
-        }
+        }catch(t){ logErr(t) }
     }()
   });
+</script>
 
-  // Mermaid
+<script type="module">
   import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
   
-  // 페이지 로드 시 및 Hydejack의 Single Page App(SPA) 전환 시에도 작동하도록 설정
+  // Mermaid 초기화 설정
+  mermaid.initialize({ 
+    startOnLoad: false, 
+    theme: 'default',
+    securityLevel: 'loose' 
+  });
+
   const renderMermaid = async () => {
-    mermaid.initialize({ startOnLoad: false, theme: 'default' });
-    await mermaid.run({
-      querySelector: '.language-mermaid',
-    });
+    // 하이라이팅 엔진이 입혀져도 텍스트만 추출해서 렌더링
+    const elements = document.querySelectorAll('.language-mermaid');
+    for (const el of elements) {
+      const code = el.innerText;
+      const id = 'mermaid-' + Math.random().toString(36).substr(2, 9);
+      try {
+        const { svg } = await mermaid.render(id, code);
+        // 코드 블록을 SVG로 교체
+        const container = el.closest('pre') || el;
+        container.innerHTML = svg;
+        container.style.background = 'transparent';
+        container.style.border = 'none';
+      } catch (err) {
+        console.error('Mermaid render error:', err);
+      }
+    }
   };
 
-  // 일반 로드 시
-  document.addEventListener('DOMContentLoaded', renderMermaid);
+  // 초기 로드 시 실행
+  if (document.readyState === 'complete') {
+    renderMermaid();
+  } else {
+    window.addEventListener('load', renderMermaid);
+  }
 
-  // Hydejack의 push-state(페이지 전환) 대응
-  document.querySelector('hy-push-state')?.addEventListener('hy-push-state-load', renderMermaid);
+  // Hydejack SPA 페이지 전환 시 실행
+  document.getElementById('_pushState')?.addEventListener('hy-push-state-load', renderMermaid);
 </script>
 
 {% comment %}
