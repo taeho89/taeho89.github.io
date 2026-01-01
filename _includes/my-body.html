@@ -33,46 +33,83 @@ Code for integrating CloudFlare's email protection with Hydejack's single page a
     }()
   });
 </script>
-
 <script type="module">
   import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-  
-  // Mermaid 초기화 설정
-  mermaid.initialize({ 
-    startOnLoad: false, 
+
+  // 1. 초기화
+  mermaid.initialize({
+    startOnLoad: false,
     theme: 'default',
-    securityLevel: 'loose' 
+    securityLevel: 'loose',
+    logLevel: 'debug' // 콘솔에서 에러를 더 자세히 보기 위함
   });
 
   const renderMermaid = async () => {
-    // 하이라이팅 엔진이 입혀져도 텍스트만 추출해서 렌더링
-    const elements = document.querySelectorAll('.language-mermaid');
+    console.log("Mermaid 렌더링 시도 중...");
+    
+    // Hydejack에서 생성하는 다양한 코드 블록 패턴을 모두 잡습니다.
+    const elements = document.querySelectorAll('pre.language-mermaid, .language-mermaid pre, code.language-mermaid, .mermaid');
+    
+    if (elements.length === 0) {
+      console.log("렌더링할 Mermaid 블록을 찾지 못했습니다.");
+      return;
+    }
+
     for (const el of elements) {
-      const code = el.innerText;
+      // 이미 렌더링된 것은 건너뜀
+      if (el.getAttribute('data-processed')) continue;
+
+      const code = el.innerText || el.textContent;
       const id = 'mermaid-' + Math.random().toString(36).substr(2, 9);
+      
       try {
         const { svg } = await mermaid.render(id, code);
-        // 코드 블록을 SVG로 교체
+        
+        // 부모 중 가장 가까운 pre 태그를 찾거나 없으면 본인을 교체
         const container = el.closest('pre') || el;
-        container.innerHTML = svg;
-        container.style.background = 'transparent';
-        container.style.border = 'none';
+        const wrapper = document.createElement('div');
+        wrapper.className = 'mermaid-rendered';
+        wrapper.innerHTML = svg;
+        
+        container.parentNode.replaceChild(wrapper, container);
+        console.log(`${id} 렌더링 성공`);
       } catch (err) {
-        console.error('Mermaid render error:', err);
+        console.error('Mermaid 개별 렌더링 에러:', err);
       }
     }
   };
 
-  // 초기 로드 시 실행
+  // 2. 실행 타이밍 (Hydejack 전용 이벤트 포함)
+  
+  // 첫 로드 시
   if (document.readyState === 'complete') {
     renderMermaid();
   } else {
     window.addEventListener('load', renderMermaid);
   }
 
-  // Hydejack SPA 페이지 전환 시 실행
-  document.getElementById('_pushState')?.addEventListener('hy-push-state-load', renderMermaid);
+  // Hydejack SPA 페이지 전환 후 (매우 중요)
+  document.getElementById('_pushState')?.addEventListener('hy-push-state-after', () => {
+    // 페이지 전환 후 약간의 지연을 주어 DOM이 완전히 준비되게 함
+    setTimeout(renderMermaid, 100);
+  });
 </script>
+
+<style>
+  /* 렌더링된 차트가 너무 작게 나오지 않도록 스타일 추가 */
+  .mermaid-rendered {
+    display: flex;
+    justify-content: center;
+    background-color: white; /* 어두운 테마 사용 시 가독성을 위해 */
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin: 1rem 0;
+  }
+  .mermaid-rendered svg {
+    max-width: 100%;
+    height: auto;
+  }
+</style>
 
 {% comment %}
 <!--
