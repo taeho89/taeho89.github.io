@@ -47,6 +47,23 @@ Code for integrating CloudFlare's email protection with Hydejack's single page a
         }
     }()
   });
+
+  // Mermaid
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  
+  // 페이지 로드 시 및 Hydejack의 Single Page App(SPA) 전환 시에도 작동하도록 설정
+  const renderMermaid = async () => {
+    mermaid.initialize({ startOnLoad: false, theme: 'default' });
+    await mermaid.run({
+      querySelector: '.language-mermaid',
+    });
+  };
+
+  // 일반 로드 시
+  document.addEventListener('DOMContentLoaded', renderMermaid);
+
+  // Hydejack의 push-state(페이지 전환) 대응
+  document.querySelector('hy-push-state')?.addEventListener('hy-push-state-load', renderMermaid);
 </script>
 
 {% comment %}
