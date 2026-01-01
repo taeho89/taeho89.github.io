@@ -33,81 +33,118 @@ Code for integrating CloudFlare's email protection with Hydejack's single page a
     }()
   });
 </script>
+
 <script type="module">
   import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
 
-  // 1. 초기화
-  mermaid.initialize({
-    startOnLoad: false,
-    theme: 'default',
-    securityLevel: 'loose',
-    logLevel: 'debug' // 콘솔에서 에러를 더 자세히 보기 위함
-  });
+  mermaid.initialize({ startOnLoad: false, theme: 'default', securityLevel: 'loose' });
 
-  const renderMermaid = async () => {
-    console.log("Mermaid 렌더링 시도 중...");
-    
-    // Hydejack에서 생성하는 다양한 코드 블록 패턴을 모두 잡습니다.
-    const elements = document.querySelectorAll('pre.language-mermaid, .language-mermaid pre, code.language-mermaid, .mermaid');
-    
-    if (elements.length === 0) {
-      console.log("렌더링할 Mermaid 블록을 찾지 못했습니다.");
-      return;
-    }
-
+  async function renderMermaid() {
+    const elements = document.querySelectorAll('pre.language-mermaid, .language-mermaid pre, code.language-mermaid');
     for (const el of elements) {
-      // 이미 렌더링된 것은 건너뜀
       if (el.getAttribute('data-processed')) continue;
-
-      const code = el.innerText || el.textContent;
-      const id = 'mermaid-' + Math.random().toString(36).substr(2, 9);
-      
+      const code = (el.innerText || el.textContent).trim();
+      const id = 'm' + Math.random().toString(36).substring(2, 11);
       try {
         const { svg } = await mermaid.render(id, code);
-        
-        // 부모 중 가장 가까운 pre 태그를 찾거나 없으면 본인을 교체
         const container = el.closest('pre') || el;
         const wrapper = document.createElement('div');
         wrapper.className = 'mermaid-rendered';
         wrapper.innerHTML = svg;
         
-        container.parentNode.replaceChild(wrapper, container);
-        console.log(`${id} 렌더링 성공`);
-      } catch (err) {
-        console.error('Mermaid 개별 렌더링 에러:', err);
-      }
-    }
-  };
+        wrapper.addEventListener('click', () => openMermaidModal(svg));
+        wrapper.style.cursor = 'zoom-in';
 
-  // 2. 실행 타이밍 (Hydejack 전용 이벤트 포함)
-  
-  // 첫 로드 시
-  if (document.readyState === 'complete') {
-    renderMermaid();
-  } else {
-    window.addEventListener('load', renderMermaid);
+        container.parentNode.replaceChild(wrapper, container);
+        el.setAttribute('data-processed', 'true');
+      } catch (err) { console.error('Mermaid Error:', err); }
+    }
   }
 
-  // Hydejack SPA 페이지 전환 후 (매우 중요)
-  document.getElementById('_pushState')?.addEventListener('hy-push-state-after', () => {
-    // 페이지 전환 후 약간의 지연을 주어 DOM이 완전히 준비되게 함
-    setTimeout(renderMermaid, 100);
+  function openMermaidModal(svgContent) {
+    const modal = document.getElementById('mermaid-modal');
+    const content = document.getElementById('mermaid-modal-content');
+    content.innerHTML = svgContent;
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeMermaidModal() {
+    const modal = document.getElementById('mermaid-modal');
+    modal.style.display = 'none';
+    document.body.style.overflow = 'auto';
+  }
+
+  window.addEventListener('load', () => {
+    const modal = document.createElement('div');
+    modal.id = 'mermaid-modal';
+    modal.innerHTML = '<div id="mermaid-modal-content"></div><div id="mermaid-modal-close">&times;</div>';
+    document.body.appendChild(modal);
+
+    modal.addEventListener('click', closeMermaidModal);
+    
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.style.display === 'flex') {
+        closeMermaidModal();
+      }
+    });
   });
+
+  if (document.readyState === 'complete') renderMermaid();
+  else window.addEventListener('load', renderMermaid);
+  document.getElementById('_pushState')?.addEventListener('hy-push-state-after', () => setTimeout(renderMermaid, 200));
 </script>
 
 <style>
-  /* 렌더링된 차트가 너무 작게 나오지 않도록 스타일 추가 */
-  .mermaid-rendered {
-    display: flex;
+  /* 기본 차트 스타일 */
+  .mermaid-rendered { display: flex; justify-content: center; background: white; padding: 20px; border-radius: 8px; margin: 20px 0; }
+  .mermaid-rendered svg { max-width: 100%; height: auto; }
+
+  /* 확대 모달 스타일 */
+  #mermaid-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background-color: rgba(0, 0, 0, 0.7);
+    align-items: center;
     justify-content: center;
-    background-color: white; /* 어두운 테마 사용 시 가독성을 위해 */
-    padding: 1rem;
-    border-radius: 0.5rem;
-    margin: 1rem 0;
   }
-  .mermaid-rendered svg {
-    max-width: 100%;
+  #mermaid-modal-content {
+    width: 90%;
+    height: 85%;
+    /* max-width: 1200px;
+    max-height: 800px; */
+    background-color: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  #mermaid-modal-content svg {
+    width: 100%;
     height: auto;
+    max-height: 100%;
+  }
+  #mermaid-modal-close {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    color: #333;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 10000;
+    transition: color 0.2s;
+  }
+  #mermaid-modal-close:hover {
+    color: #000;
   }
 </style>
 

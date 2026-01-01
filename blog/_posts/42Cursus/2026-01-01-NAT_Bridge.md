@@ -60,7 +60,7 @@ sequenceDiagram
 
 ```mermaid
 packet
-title: "NAT 이전 IP 헤더"
+title NAT 이전 IP 헤더
 0-3: "Version"
 4-7: "IHL"
 8-15: "TOS"
@@ -75,7 +75,7 @@ title: "NAT 이전 IP 헤더"
 
 ```mermaid
 packet
-title: "NAT 이후 IP 헤더"
+title NAT 이후 IP 헤더
 0-3: "Version"
 4-7: "IHL"
 8-15: "TOS"
